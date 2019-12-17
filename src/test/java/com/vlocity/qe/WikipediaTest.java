@@ -1,60 +1,24 @@
 package com.vlocity.qe;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import com.vlocity.qe.baseClass.TestBase;
+import com.vlocity.qe.pages.PG_Wiki;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * This class verifies elements on the wikipedia homepage.
  */
-public class WikipediaTest {
+public class WikipediaTest extends TestBase {
+    private PG_Wiki pg_wiki;
 
-    private Logger log = LoggerFactory.getLogger(WikipediaTest.class);
-
-    private WebDriver driver;
-    private ElementFinder finder;
-
-    @BeforeClass
-    public void setup() {
-
-        /*
-            If the following driver version doesn't work with your Chrome version
-            see https://sites.google.com/a/chromium.org/chromedriver/downloads
-            and update it as needed.
-        */
-
-        WebDriverManager.chromedriver().version("74.0.3729.6").setup();
-        driver = new ChromeDriver();
-        finder = new ElementFinder(driver);
-        driver.get("https://www.wikipedia.org/");
+    @BeforeMethod
+    public void init() {
+        pg_wiki = new PG_Wiki(this.driver, this.wait);
     }
 
     @Test
     public void sloganPresent() {
-
-        String sloganClass = "localized-slogan";
-        WebElement slogan = finder.findElement(By.className(sloganClass));
-
-        Assert.assertNotNull(slogan, String.format("Unable to find slogan div by class: %s", sloganClass));
-
-        log.info("Slogan text is {}", slogan.getText());
-
-        Assert.assertEquals(slogan.getText(), "The Free Encyclopedia");
+        pg_wiki.verifySloganIsPresent();
     }
 
-    @AfterClass
-    public void closeBrowser() {
-
-        if(driver!=null) {
-            driver.close();
-        }
-    }
 }
