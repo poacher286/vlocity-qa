@@ -37,14 +37,14 @@ public class ElementFinder {
 
     public List<WebElement> findElements(By by) {
         log.info("Using By {}", by.toString());
-        List<WebElement> value = null;
+        List<WebElement> values = null;
 
         try {
-            value = driver.findElements(by);
+            values = driver.findElements(by);
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
         }
 
-        return value;
+        return values;
     }
 }
