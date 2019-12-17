@@ -7,14 +7,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PageBase {
-    private TestBase testBase;
+    protected WebDriver driver;
+    protected WebDriverWait wait;
+
+    protected TestBase testBase;
     protected ElementFinder finder;
     protected Logger log = LoggerFactory.getLogger(PageBase.class);
 
-    public PageBase(WebDriver driver, WebDriverWait wait){
+    public PageBase(WebDriver driver, WebDriverWait wait) {
+        this.driver = driver;
+        this.wait = wait;
         testBase = new TestBase();
         finder = new ElementFinder(driver);
     }
-
 
 }
