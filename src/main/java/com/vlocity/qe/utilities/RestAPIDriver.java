@@ -2,21 +2,11 @@ package com.vlocity.qe.utilities;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
 
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 public class RestAPIDriver {
@@ -29,16 +19,12 @@ public class RestAPIDriver {
      * @param requestPaylod  JSON Payload into String format
      * @param requestType    POST/PUT/DELETE/GET
      * @return HttpResponse
-     * @throws NoSuchAlgorithmException
-     * @throws KeyStoreException
-     * @throws KeyManagementException
      * @throws IOException
      */
-    public static HttpResponse callRestService(HashMap<String, String> requestHeaders, String requestUrl, String requestPaylod, String requestType) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
+    public static HttpResponse callRestService(HashMap<String, String> requestHeaders, String requestUrl, String requestPaylod, String requestType) throws IOException {
 
         StringEntity payload;
-//        HttpClient requestClient = HttpClientBuilder.create().build();
-        HttpClient requestClient = setClientForSelfSignedCertificate();
+        HttpClient requestClient = HttpClientBuilder.create().disableCookieManagement().build();
         HttpUriRequest request;
         switch (requestType.toUpperCase()) {
             case "POST":
@@ -70,18 +56,6 @@ public class RestAPIDriver {
             }
         }
         return requestClient.execute(request);
-    }
-
-    private static HttpClient setClientForSelfSignedCertificate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
-        return HttpClients.custom()
-                .setDefaultRequestConfig(RequestConfig.custom()
-                        .setCookieSpec(CookieSpecs.STANDARD).build())
-                .build();
-
-//        SSLContextBuilder builder = new SSLContextBuilder();
-//        builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-//        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
-//        return HttpClients.custom().setSSLSocketFactory(sslsf).build();
     }
 
 }

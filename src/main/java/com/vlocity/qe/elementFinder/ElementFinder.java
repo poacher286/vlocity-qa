@@ -1,4 +1,4 @@
-package com.vlocity.qe;
+package com.vlocity.qe.elementFinder;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -20,31 +20,29 @@ public class ElementFinder {
         this.driver = driver;
     }
 
+    /**
+     * Method to get element
+     * @param by
+     * @return
+     */
     public WebElement findElement(By by) {
-
         log.info("Using By {}", by.toString());
         WebElement value = null;
-
         try {
             value = driver.findElement(by);
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
         }
-
         return value;
     }
 
-
+    /**
+     * Method to get List of elements
+     * @param by
+     * @return
+     */
     public List<WebElement> findElements(By by) {
         log.info("Using By {}", by.toString());
-        List<WebElement> values = null;
-
-        try {
-            values = driver.findElements(by);
-        } catch (NoSuchElementException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return values;
+        return driver.findElements(by);
     }
 }
